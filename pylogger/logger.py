@@ -1,10 +1,12 @@
+"""This module contains the Logger class for logging to the file and stdout."""
+
 import logging
 import os
 import shutil
 import sys
 from datetime import datetime
 
-log_level = os.getenv("LOG_LEVEL", logging.DEBUG)
+log_level = os.getenv("LOG_LEVEL", "DEBUG")
 # region constants
 LOG_FORMATTER = "%(name)s | %(asctime)s | %(levelname)s | %(message)s"
 LOG_DIR = os.path.join(os.getcwd(), "logs")
@@ -32,7 +34,9 @@ class Logger(logging.Logger):
         self.log_dir = LOG_DIR
         self.setLevel(log_level)
         self.stdout_handler = logging.StreamHandler(sys.stdout)
-        self.file_handler = logging.FileHandler(filename=self.log_file, mode="a", encoding="utf-8")
+        self.file_handler = logging.FileHandler(
+            filename=self.log_file, mode="a", encoding="utf-8"
+        )
         self.fmt = LOG_FORMATTER
         self.stdout_handler.setFormatter(logging.Formatter(LOG_FORMATTER))
         self.file_handler.setFormatter(logging.Formatter(LOG_FORMATTER))
@@ -58,10 +62,10 @@ class Logger(logging.Logger):
         """
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         save_path = os.path.join(TB_DIR, f"{timestamp}.txt")
-        with open(save_path, "w") as f:
+        with open(save_path, "w", encoding="utf-8") as f:
             f.write(tb)
 
-        self.info(f"Traceback saved to {save_path}")
+        self.info("Traceback saved to %s.", save_path)
 
     def archive_logs(self) -> str:
         """Archives log files for the current day and returns archive path.
@@ -69,8 +73,10 @@ class Logger(logging.Logger):
         Returns:
             str: Archive path.
         """
-        save_path = os.path.join(ARCHIVES_DIR, f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}")
-        self.debug(f"Starting to archive logs to {save_path} from {self.log_dir}.")
+        save_path = os.path.join(
+            ARCHIVES_DIR, f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
+        )
+        self.debug("Starting to archive logs to %s from %s", save_path, self.log_dir)
         shutil.make_archive(save_path, "zip", self.log_dir)
-        self.info(f"Logs archived to {save_path}.")
+        self.info("Logs archived to %s.", save_path)
         return save_path + ".zip"
