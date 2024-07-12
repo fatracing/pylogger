@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pylogger"
+version = "0.1.0"
+description = "Simple logger for Python."
+authors = [{name = "iwatkot", email = "iwatkot@gmail.com"}]
+license = {text = "MIT License"}
+readme = "README.md"
+keywords = ["logger"]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/fatracing/pylogger"
+Repository = "https://github.com/fatracing/pylogger"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pylogger*"]
+exclude = ["dev*"]
